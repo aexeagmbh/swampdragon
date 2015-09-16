@@ -24,7 +24,15 @@ def contains_compare(term, val):
 def in_compare(term, val):
     if not val or not term:
         return False
-    return val in [type(val)(t) for t in term]
+
+    def cast(target, value):
+        try:
+            return target(value)
+        except ValueError:
+            return None
+
+    target = type(val)
+    return val in (cast(target, t) for t in term)
 
 
 def lt_compare(term, val):
